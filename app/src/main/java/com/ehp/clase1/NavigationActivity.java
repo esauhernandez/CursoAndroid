@@ -16,15 +16,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ehp.clase1.fragmentss.CameraFragment;
+import com.ehp.clase1.fragmentss.MapFragment;
 import com.ehp.clase1.fragmentss.GalleryFragment;
 import com.ehp.clase1.fragmentss.SlideshowFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private Toolbar toolbar;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +34,6 @@ public class NavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -105,7 +98,7 @@ public class NavigationActivity extends AppCompatActivity
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_camera:
+                            case R.id.nav_map:
                                 menuItem.setChecked(true);
                                 setFragment(0);
                                 toolbar.setTitle("Camera");
@@ -127,6 +120,7 @@ public class NavigationActivity extends AppCompatActivity
                                 Intent intent = new Intent(NavigationActivity.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // <- Aquí :)
                                 startActivity(intent);
+                                firebaseAuth.signOut();
                                 finish();
                                 return true;
                         }
@@ -142,8 +136,8 @@ public class NavigationActivity extends AppCompatActivity
             case 0:
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                CameraFragment cameraFragment = new CameraFragment();
-                fragmentTransaction.replace(R.id.fragment, cameraFragment);
+                MapFragment mapFragment = new MapFragment();
+                fragmentTransaction.replace(R.id.fragment, mapFragment);
                 fragmentTransaction.commit();
                 break;
             case 1:
